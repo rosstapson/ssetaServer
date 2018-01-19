@@ -51,6 +51,7 @@ function createToken(user) {
   });
 
   app.post('/users', (req, res) => {
+      console.log(req.body.user);
       const newuser = new req.userModel(Object.assign({}, req.body.user, {created_at: Date.now()}));
       newuser.save((err, saveduser) => {
           res.json(saveduser)
