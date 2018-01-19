@@ -5,7 +5,13 @@ var config = require("../config");
 
 module.exports = {    
     connectDisconnect: (req, res, next) => {
-        const connection = mongoose.connect(config.DB_URL);
+        try {
+            const connection = mongoose.connect(config.DB_URL);        
+            connection.on('error', console.error.bind(console, 'connection error:'));
+        }
+        catch(err) {
+            console.log(err)
+        }
         req.userModel = connection.model('User', UserSchema);
         req.questionnaireModel = connection.model('Questionnaire', QuestionnaireSchema);
         req.on('end', () => {           
