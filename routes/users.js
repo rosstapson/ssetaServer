@@ -31,6 +31,7 @@ function createToken(user) {
         query.select('id email username password');
         query.exec((err, user) => {            
             if(err) {
+                console.log(err)
                 res.status(400).send(err);
             }
             if (user && password === user.password) {
@@ -39,6 +40,7 @@ function createToken(user) {
                 res.json(res.status(200).send({token: createToken(user)}));
             }
             else {
+                console.log("not found: " + req.body.user.email);
                 res.status(400).send("No luck");
             }
         });
