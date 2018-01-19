@@ -12,7 +12,7 @@ module.exports = (app) => {
         var questionnaire = req.body.questionnaire;
         questionnaire.createdBy = 'bob';
         try {
-            const newQuestionnaire = new req.questionnaireModel(Object.assign({}, questionnaire));            
+            const newQuestionnaire = req.questionnaireModel(Object.assign({}, questionnaire));            
             newQuestionnaire.save((err, savedQ) => {
                  res.json(savedQ);
             })
