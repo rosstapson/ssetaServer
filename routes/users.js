@@ -34,7 +34,8 @@ function createToken(user) {
                 res.status(400).send(err);
             }
             if (user && password === user.password) {
-                user.token
+                console.log("found");
+                //user.token
                 res.json(res.status(200).send({token: createToken(user)}));
             }
             else {
