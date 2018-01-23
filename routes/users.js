@@ -2,7 +2,6 @@
 var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
-const User = require('../models/User');
 var config = require("../config");
 
 module.exports = (app) => {
@@ -36,50 +35,19 @@ function createToken(user) {
 }
   app.options('/login', cors());
   app.post('/login', (req, res) => {
-      //res.json(req.body);
-    var password = req.body.user.password;
-    try {
-        var query = req.userModel.findOne({'email': req.body.user.email});
-        query.select('id email username password');
-        query.exec((err, user) => {            
-            if(err) {
-                console.log(err)
-                res.status(400).send(err);
-            }
-            if (user && password === user.password) {
-                console.log("found");
-                //user.token
-                res.json(res.status(200).send({token: createToken(user)}));
-            }
-            else {
-                console.log("not found: " + req.body.user.email);
-                res.status(400).send("No luck");
-            }
-        });
-    }
-    catch(err) {
-        res.status(400).send("zomg");
-    }
+      console.log("post login");
   });
 
   app.post('/users', (req, res) => {
-      console.log(req.body.user);
-      const newuser = new req.userModel(Object.assign({}, req.body.user, {created_at: Date.now()}));
-      newuser.save((err, saveduser) => {
-          res.json(saveduser)
-      })
+      console.log("post /users");
+      
   })
 
   app.put('/users', (req, res) => {
-    const idParam = req.webtaskContext.query.id;
-    req.userModel.findOne({_id: idParam}, (err, userToUpdate) => {
-        const updateduser = Object.assign(userToUpdate, req.body);
-        updateduser.save((err, user) => res.json(user))
-    })
+    console.log("put /users")
   })
 
   app.delete('/users', (req, res) => {
-    const idParam = req.webtaskContext.query.id;
-    req.userModel.remove({_id: idParam}, (err, removeduser) => res.json(removeduser));
+    console.log("delete /users")
   })
 }
