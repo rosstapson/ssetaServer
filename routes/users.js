@@ -1,5 +1,5 @@
 // ./routes/users.js
-var mongoose = require('mongoose');
+var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 const User = require('../models/User');
@@ -9,7 +9,21 @@ mongoose.Promise = global.Promise;
 
 module.exports = (app) => {
   app.get('/users', (req, res) => {
-      req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
+      //req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
+      var c = new Client({
+        host: '127.0.0.1',
+        user: 'centos',
+        password: 'yoda100'
+      });
+      
+      c.query('SHOW DATABASES', null, { metadata: true }, function(err, rows) {
+        if (err)
+          console.log(err);
+        // `rows.info.metadata` contains the metadata
+        console.dir(rows);
+      });
+      
+      c.end();
   });
 function createToken(user) {
     if (!user.role) {
