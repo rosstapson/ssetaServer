@@ -5,8 +5,6 @@ var jwt = require('jsonwebtoken');
 const User = require('../models/User');
 var config = require("../config");
 
-mongoose.Promise = global.Promise;
-
 module.exports = (app) => {
   app.get('/users', (req, res) => {
       //req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
