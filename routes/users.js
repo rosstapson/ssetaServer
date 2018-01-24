@@ -3,7 +3,11 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
+<<<<<<< HEAD
 var cuid = require("cuid");
+=======
+
+>>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
 
 module.exports = (app) => {
   app.get('/users', (req, res) => {
@@ -62,7 +66,11 @@ function createToken(user) {
     c.end();
   });
 
-  app.post('/users', (req, res) =>   {
+<<<<<<< HEAD
+
+=======
+  app.post('/users', (req, res) => {
+>>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
     var user = req.body.user;
     var id = cuid();
     if (!user.email || !user.password) {
@@ -71,8 +79,12 @@ function createToken(user) {
     else {
       var c = new Client(config.DB_CONFIG);
 
+<<<<<<< HEAD
     c.query('INSERT INTO users (name, email, password, company, division, role, access_level, telephone, address, state, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
      [ 
+=====
+      
+>>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
         user.name,
         user.email,
         user.password,
@@ -94,7 +106,10 @@ function createToken(user) {
       }
     })
   }
+<<<<<<< HEAD
 });
+=======
+>>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
 
   app.put('/users', (req, res) => {
     console.log("put /users")
