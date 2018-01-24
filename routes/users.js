@@ -3,6 +3,7 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
+var cuid = require(cuid);
 
 module.exports = (app) => {
   app.get('/users', (req, res) => {
@@ -55,9 +56,38 @@ function createToken(user) {
   });
 
   app.post('/users', (req, res) => {
-      console.log("post /users");
-      
-  })
+    var user = req.body.user;
+    var id = cuid();
+    if (!user.email || !user.password) {
+      res.status(400).send("Invalid user credentials");
+    }
+    else {
+      var c = new Client(config.DB_CONFIG);
+
+    c.query('INSERT INTO users values (id, name, email, password, company, division, role, access_level, telephone, address, state, country) VALUES ?',
+     [
+        id, 
+        user.name,
+        user.email,
+        user.password,
+        user.company,
+        user.division,
+        user.role,
+        user.accessLevel,
+        user.telephone,
+        user.address,
+        user.state,
+        user.country
+      ],  function(err, rows) {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      }
+      else {
+        res.status(201).send("Success");
+      }
+    })
+  }
 
   app.put('/users', (req, res) => {
     console.log("put /users")
