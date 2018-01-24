@@ -40,13 +40,15 @@ function createToken(user) {
       }
       else {
          // `rows.info.metadata` contains the metadata
-      console.dir(rows.info.numRows);
-      if (rows.info.numRows === '0') {
-        res.status(400).send("Invalid User Credentials"); 
+        console.dir(rows.info.numRows);
+        if (rows.info.numRows === '0') {
+          res.status(400).send("Invalid User Credentials"); 
+        }
+        else {
+          var token = createToken(req.body.user);
+          res.status(200).send({token: token});
+        }
       }
-      else {
-        res.status(200).send("Huzzah");
-      }}
     });
     
     c.end();
