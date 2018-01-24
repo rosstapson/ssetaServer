@@ -8,12 +8,13 @@ module.exports = (app) => {
   app.get('/users', (req, res) => {
       //req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
       var c = new Client({
-        host: '127.0.0.1',
+        host: 'localhost',
         user: 'centos',
-        password: 'yoda100'
+        password: 'yoda100',
+	db: 'mysseta'
       });
       
-      c.query('SHOW DATABASES', null, { metadata: true }, function(err, rows) {
+      c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
         if (err)
           console.log(err);
         // `rows.info.metadata` contains the metadata
