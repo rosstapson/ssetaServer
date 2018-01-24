@@ -3,17 +3,10 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
-<<<<<<< HEAD
-var cuid = require("cuid");
-=======
-
->>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
 
 module.exports = (app) => {
-  app.get('/users', (req, res) => {
-      //req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
-      var c = new Client(config.DB_CONFIG);
-      
+  app.get('/users', (req, res) => {      
+      var c = new Client(config.DB_CONFIG);      
       c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
         if (err)
           console.log(err);
@@ -37,7 +30,7 @@ function createToken(user) {
   app.options('/login', cors());
   app.post('/login', (req, res) => {
     var c = new Client(config.DB_CONFIG);
-//console.log('email on request body: ' + req.body.user.email);    
+
     c.query('SELECT * FROM users WHERE email= :email', {email: req.body.user.email},  function(err, rows) {
       if (err) {
         console.log(err);
@@ -66,11 +59,7 @@ function createToken(user) {
     c.end();
   });
 
-<<<<<<< HEAD
-
-=======
   app.post('/users', (req, res) => {
->>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
     var user = req.body.user;
     var id = cuid();
     if (!user.email || !user.password) {
@@ -79,37 +68,29 @@ function createToken(user) {
     else {
       var c = new Client(config.DB_CONFIG);
 
-<<<<<<< HEAD
-    c.query('INSERT INTO users (name, email, password, company, division, role, access_level, telephone, address, state, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-     [ 
-=====
-      
->>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
-        user.name,
-        user.email,
-        user.password,
-        user.company,
-        user.division,
-        user.role,
-        user.accessLevel,
-        user.telephone,
-        user.address,
-        user.state,
-        user.country
-      ],  function(err, rows) {
-      if (err) {
-        console.log(err);
-        res.status(400).send(err);
-      }
-      else {
-        res.status(201).send("Success");
-      }
-    })
+      c.query('INSERT INTO users (name, email, password, company, division, role, access_level, telephone, address, state, country) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [ 
+          user.name,
+          user.email,
+          user.password,
+          user.company,
+          user.division,
+          user.role,
+          user.accessLevel,
+          user.telephone,
+          user.address,
+          user.state,
+          user.country
+        ],  function(err, rows) {
+        if (err) {
+          console.log(err);
+          res.status(400).send(err);
+        }
+        else {
+          res.status(201).send("Success");
+        }
+      })
   }
-<<<<<<< HEAD
-});
-=======
->>>>>>> 065ded5a2635f199d0d70a361e6baddf1ea85976
 
   app.put('/users', (req, res) => {
     console.log("put /users")
