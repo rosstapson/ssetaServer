@@ -60,8 +60,7 @@ function createToken(user) {
   });
 
   app.post('/users', (req, res) => {
-    var user = req.body.user;
-    var id = cuid();
+    var user = req.body.user;   
     if (!user.email || !user.password) {
       res.status(400).send("Invalid user credentials");
     }
@@ -90,8 +89,8 @@ function createToken(user) {
           res.status(201).send("Success");
         }
       })
-  }
-
+    }
+  })
   app.put('/users', (req, res) => {
     console.log("put /users")
   })
