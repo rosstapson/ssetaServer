@@ -7,12 +7,7 @@ var config = require("../config");
 module.exports = (app) => {
   app.get('/users', (req, res) => {
       //req.userModel.find({}).sort({'email': -1}).exec((err, users) => res.json(users))
-      var c = new Client({
-        host: 'localhost',
-        user: 'centos',
-        password: 'yoda100',
-	db: 'mysseta'
-      });
+      var c = new Client(config.DB_CONFIG);
       
       c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
         if (err)
@@ -36,7 +31,20 @@ function createToken(user) {
 }
   app.options('/login', cors());
   app.post('/login', (req, res) => {
-      console.log("post login");
+    var c = new Client(config.DB_CONFIG);
+    
+    c.query('SELECT * FROM users WHERE email= :email', {email: req.body.email},  function(err, rows) {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      }
+      else {
+         // `rows.info.metadata` contains the metadata
+      console.dir(rows);        
+      }
+    });
+    
+    c.end();
   });
 
   app.post('/users', (req, res) => {
