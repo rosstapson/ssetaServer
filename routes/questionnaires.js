@@ -44,7 +44,8 @@ module.exports = (app) => {
         }
         else { 
             console.log(rows);
-            var insertId = rows.insertId;
+            var insertId = rows.info.insertId;
+            console.log("questionnaire_id: " + insertId);
             questionnaire.entries.forEach(entry => {
                 //console.log(entry);
                 c.query('INSERT INTO questions (questionnaire_id, question_text, answer_type) VALUES (?, ?, ?)', 
