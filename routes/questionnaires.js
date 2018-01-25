@@ -55,7 +55,8 @@ module.exports = (app) => {
                   ], function(err, rows) {
                     if(err) {
                        console.log(err);
-                       res.status(400).send(err);
+                       return res.status(400).send(err);
+
                     }
                   });
             });
