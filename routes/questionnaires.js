@@ -6,7 +6,7 @@ module.exports = (app) => {
         console.log("get /questionnaire_list");
     });
     app.post('/questionnaire_list', (req, res) => {
-        var decoded = jwt.verify(req.body.token, config.secret);
+        var decoded = jwt.verify(req.body.user.token, config.secret);
         if (!decoded) {
             res.status(400).send("Invalid token");
         }
