@@ -1,0 +1,36 @@
+
+
+CREATE TABLE users (
+id MEDIUMINT NOT NULL AUTO_INCREMENT, 
+name VARCHAR(50),
+email VARCHAR(50) NOT NULL,
+password VARCHAR(50) NOT NULL,
+company VARCHAR(20),
+division VARCHAR(50),
+role VARCHAR(50),
+access_level INT,
+telephone VARCHAR(20),
+address VARCHAR(50),
+state VARCHAR(20),
+country VARCHAR(10),
+PRIMARY KEY (id)
+);
+
+
+CREATE TABLE questionnaires (
+id MEDIUMINT NOT NULL AUTO_INCREMENT, 
+name VARCHAR(50) NOT NULL,
+reference VARCHAR(50),
+training_provider VARCHAR(50),
+client_company VARCHAR(20),
+client_division VARCHAR(50),
+PRIMARY KEY (id)
+);
+
+CREATE TABLE questions (
+    id MEDIUMINT NOT NULL AUTO_INCREMENT,
+    questionnaire_id MEDIUMINT NOT NULL,
+    question_text VARCHAR(50) NOT NULL,
+    answer_type VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)    
+);
