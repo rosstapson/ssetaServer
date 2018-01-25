@@ -3,13 +3,13 @@ var jwt = require('jsonwebtoken');
 var config = require("../config");
 
 module.exports = (app) => {
-    app.get('/questionnaires', (req, res) => {
+    app.post('/questionnaire_list', (req, res) => {
         var decoded = jwt.verify(req.body.token, config.secret);
         if (!decoded) {
             res.status(400).send("Invalid token");
         }
         var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT * FROM questionnaires', null, function(err, rows) {
+        c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
             if (err)
             console.log(err);
             // `rows.info.metadata` contains the metadata

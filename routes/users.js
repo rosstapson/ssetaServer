@@ -50,7 +50,9 @@ function createToken(user) {
           }
           else {
              var token = createToken(req.body.user);
-             res.status(200).send({token: token});
+             var user = req.body.user;
+             user.token = token;
+             res.status(200).send({user: user});
           }
         }
       }
