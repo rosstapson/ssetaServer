@@ -6,7 +6,7 @@ module.exports = (app) => {
     app.get('/questionnaires', (req, res) => {
         var decoded = jwt.verify(req.body.token, config.secret);
         if (!decoded) {
-            res.status()
+            res.status(400).send("Invalid token");
         }
         var c = new Client(config.DB_CONFIG);      
         c.query('SELECT * FROM questionnaires', null, function(err, rows) {
