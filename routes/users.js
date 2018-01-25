@@ -52,7 +52,7 @@ function createToken(user) {
              var token = createToken(req.body.user);
              var user = req.body.user;
              user.token = token;
-             res.status(200).send({user: user});
+             res.status(200).send(user);
           }
         }
       }

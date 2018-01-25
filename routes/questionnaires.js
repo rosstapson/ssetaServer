@@ -45,9 +45,21 @@ module.exports = (app) => {
         else { 
             console.log(rows);
             var insertId = rows.insertId;
-            questionnaire.entries.foreach(entry => {
-                console.log(entry);
+            questionnaire.entries.forEach(entry => {
+                //console.log(entry);
+                c.query('INSERT INTO questions (questionnaire_id, question_text, answer_type) VALUES (?, ?, ?)', 
+                  [
+                    insertId,
+                    entry.question,
+                    entry.answerType
+                  ], function(err, rows) {
+                    if(err) {
+                       console.log(err);
+                       res.status(400).send(err);
+                    }
+                  });
             });
+            //console.log(questionnaire.entries);
             res.status(201).send("Questionnaire Saved");
         }
         });
