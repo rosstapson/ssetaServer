@@ -14,10 +14,20 @@ module.exports = (app) => {
         }
         var c = new Client(config.DB_CONFIG);      
         c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
-            if (err)
-            console.log(err);
+            if (err) {
+                console.log(err);
+                return res.status(400).send("zomg");
+            }
             // `rows.info.metadata` contains the metadata
-            console.dir(rows);
+            let questionnaires =[];
+            rows.forEach(row => {
+                questionnaires.push({
+                    id: row.id,
+                    name: row.name,
+                    reference: row.reference
+                })
+            });
+            res.status(200).send(questionnaires);
         });
       
         c.end();
@@ -61,7 +71,7 @@ module.exports = (app) => {
                   });
             });
             //console.log(questionnaire.entries);
-            res.status(201).send("Questionnaire Saved");
+            res.status(201).send({message: "Questionnaire Saved"});
         }
         });
 
