@@ -44,6 +44,10 @@ module.exports = (app) => {
         }
         else { 
             console.log(rows);
+            var insertId = rows.insertId;
+            questionnaire.entries.foreach(entry => {
+                console.log(entry);
+            });
             res.status(201).send("Questionnaire Saved");
         }
         });
