@@ -3,6 +3,9 @@ var jwt = require('jsonwebtoken');
 var config = require("../config");
 
 module.exports = (app) => {
+    app.get('/questionnaire_list', (req, res) => {
+        console.log("get /questionnaire_list");
+    });
     app.post('/questionnaire_list', (req, res) => {
         var decoded = jwt.verify(req.body.token, config.secret);
         if (!decoded) {
