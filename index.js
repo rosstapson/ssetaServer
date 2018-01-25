@@ -8,6 +8,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 require('./routes/users')(app);
-//require('./routes/questionnaires')(app);
+require('./routes/questionnaires')(app);
 
 app.listen(8080, () => console.log('ZOMG. listening on port 8080.'))
