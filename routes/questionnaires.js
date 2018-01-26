@@ -105,6 +105,7 @@ module.exports = (app) => {
                     return res.status(400).send("Unable to retrieve questions");
                 }
                 rows.forEach(row => {
+                    console.log(row);
                     let entry = {
                         id: row.id,
                         questionText: row.question_text,
