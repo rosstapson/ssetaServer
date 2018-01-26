@@ -84,7 +84,7 @@ module.exports = (app) => {
             res.status(400).send("Invalid token");
         }
         var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT * FROM questionnaires WHERE id = (?)', req.body.id, function(err, rows) {
+        c.query('SELECT * FROM questionnaires WHERE id = ?', [req.body.id], function(err, rows) {
             if (err) {
                 console.log(err);
                 return res.status(400).send("Unable to retrieve questionnaire");
@@ -96,9 +96,10 @@ module.exports = (app) => {
                 reference: rows[0].reference,
                 trainingProvider: rows[0].training_provider,
                 clientCompany: rows[0].client_company,
-                clientDivision: rows[0].client_division
+                clientDivision: rows[0].client_division,
+                formEntries: []
             };
-            c.query('SELECT * FROM questionnaires WHERE id = (?)', req.body.id, function(err, rows) {
+            c.query('SELECT * FROM questions WHERE questionnaire_id = ?', [req.body.id], function(err, rows) {
                 if (err) {
                     console.log(err);
                     return res.status(400).send("Unable to retrieve questions");
@@ -109,6 +110,7 @@ module.exports = (app) => {
                         questionText: row.question_text,
                         answerType: row.answer_type
                     }
+                    questionnaire.formEntries.push(entry);
                 });            
             });
             res.status(200).send(questionnaire);
