@@ -76,7 +76,7 @@ module.exports = (app) => {
         });
 
     });
-    app.post('/get_questionnaire', (req, res) => {        
+    app.post('/get_questionnaire', (req, res) => {
         var decoded = jwt.verify(req.body.token, config.secret);
         if (!decoded) {
             res.status(400).send("Invalid token");
@@ -107,8 +107,7 @@ module.exports = (app) => {
                         questionText: row.question_text,
                         answerType: row.answer_type
                     }
-                });
-            });
+                });            
             });
             res.status(200).send(questionnaire);
         });
