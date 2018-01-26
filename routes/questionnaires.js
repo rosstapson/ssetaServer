@@ -54,6 +54,7 @@ module.exports = (app) => {
         else { 
             console.log(rows);
             var insertId = rows.info.insertId;
+            questionnaire.id = insertId;
             console.log("questionnaire_id: " + insertId);
             questionnaire.entries.forEach(entry => {
                 //console.log(entry);
@@ -71,7 +72,8 @@ module.exports = (app) => {
                   });
             });
             //console.log(questionnaire.entries);
-            res.status(201).send({message: "Questionnaire Saved"});
+            questionnaire.entries = [];
+            res.status(201).send({questionnaire: questionnaire});
         }
         });
 
