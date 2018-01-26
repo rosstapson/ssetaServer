@@ -46,7 +46,7 @@ module.exports = (app) => {
         questionnaire.reference,
         questionnaire.trainingProvider,
         questionnaire.clientCompany,
-        questionnaire.clientDivistion          
+        questionnaire.clientDivision          
         ],  function(err, rows) {
         if (err) {
           console.log(err);
