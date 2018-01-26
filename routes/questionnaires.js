@@ -6,8 +6,7 @@ module.exports = (app) => {
     app.get('/questionnaire_list', (req, res) => {
         console.log("get /questionnaire_list");
     });
-    app.post('/questionnaire_list', (req, res) => {
-        
+    app.post('/questionnaire_list', (req, res) => {        
         var decoded = jwt.verify(req.body.token, config.secret);
         if (!decoded) {
             res.status(400).send("Invalid token");
@@ -76,5 +75,44 @@ module.exports = (app) => {
         }
         });
 
+    });
+    app.post('/get_questionnaire', (req, res) => {        
+        var decoded = jwt.verify(req.body.token, config.secret);
+        if (!decoded) {
+            res.status(400).send("Invalid token");
+        }
+        var c = new Client(config.DB_CONFIG);      
+        c.query('SELECT * FROM questionnaires WHERE id = (?)', req.body.id, function(err, rows) {
+            if (err) {
+                console.log(err);
+                return res.status(400).send("Unable to retrieve questionnaire");
+            }
+            // `rows.info.metadata` contains the metadata
+            let questionnaire = {
+                id: row.id,
+                name: row.name,
+                reference: row.reference,
+                trainingProvider: row.training_provider,
+                clientCompany: row.client_company,
+                clientDivision: row.client_division
+            };
+            c.query('SELECT * FROM questionnaires WHERE id = (?)', req.body.id, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send("Unable to retrieve questions");
+                }
+                rows.forEach(row => {
+                    let entry = {
+                        id: row.id,
+                        questionText: row.question_text,
+                        answerType: row.answer_type
+                    }
+                });
+            });
+            });
+            res.status(200).send(questionnaire);
+        });
+      
+        c.end();
     });
 }
