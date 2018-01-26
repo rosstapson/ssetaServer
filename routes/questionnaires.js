@@ -109,10 +109,10 @@ module.exports = (app) => {
                 rows.forEach(row => {
                     console.log("3");                   
                     questionnaire.formEntries.push(row);
-                });            
-            });
-            console.log("4: " + questionnaire);
-            res.status(200).send(questionnaire);
+                });
+                console.log("4: " + questionnaire);
+                return res.status(200).send(questionnaire);
+            });            
         });
       
         c.end();
