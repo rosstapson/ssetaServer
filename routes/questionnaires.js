@@ -89,8 +89,8 @@ module.exports = (app) => {
                 console.log(err);
                 return res.status(400).send("Unable to retrieve questionnaire");
             }
-            // `ows.info.metadata` contains the metadat
-            console.log("1");
+            // rows.info.metadata` contains the metadat
+            
             let questionnaire = {
                 id: rows[0].id,
                 name: rows[0].name,
@@ -100,17 +100,15 @@ module.exports = (app) => {
                 clientDivision: rows[0].client_division,
                 formEntries: []
             };
-            console.log("2");
+            
             c.query('SELECT * FROM questions WHERE questionnaire_id = ?', [req.body.id], function(err, rows) {
                 if (err) {
                     console.log(err);
                     return res.status(400).send("Unable to retrieve questions");
                 }
-                rows.forEach(row => {
-                    console.log("3");                   
+                rows.forEach(row => {                                       
                     questionnaire.formEntries.push(row);
-                });
-                console.log("4: " + questionnaire);
+                });                
                 return res.status(200).send(questionnaire);
             });            
         });
