@@ -91,12 +91,12 @@ module.exports = (app) => {
             }
             // `rows.info.metadata` contains the metadata
             let questionnaire = {
-                id: row.id,
-                name: row.name,
-                reference: row.reference,
-                trainingProvider: row.training_provider,
-                clientCompany: row.client_company,
-                clientDivision: row.client_division
+                id: rows[0].id,
+                name: rows[0].name,
+                reference: rows[0].reference,
+                trainingProvider: rows[0].training_provider,
+                clientCompany: rows[0].client_company,
+                clientDivision: rows[0].client_division
             };
             c.query('SELECT * FROM questionnaires WHERE id = (?)', req.body.id, function(err, rows) {
                 if (err) {
