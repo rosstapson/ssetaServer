@@ -7,10 +7,12 @@ module.exports = {
                 return false;
             }
             else {
+                console.log("valid");
                 return "valid";
             }
         }
         catch(err) {
+            console.log(err);
             return false;
         }
     }
