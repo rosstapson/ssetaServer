@@ -1,15 +1,19 @@
 var Client = require('mariasql');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
+var checkToken = require('../utility/util').checkToken;
 
 module.exports = (app) => {
     app.get('/questionnaire_list', (req, res) => {
         console.log("get /questionnaire_list");
     });
     app.post('/questionnaire_list', (req, res) => {        
-        var decoded = jwt.verify(req.body.token, config.secret);
-        if (!decoded) {
-            res.status(400).send("Invalid token");
+        // var decoded = jwt.verify(req.body.token, config.secret);
+        // if (!decoded) {
+        //     res.status(400).send("Invalid token");
+        // }
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
         }
         var c = new Client(config.DB_CONFIG);      
         c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
