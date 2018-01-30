@@ -1,5 +1,5 @@
 var Client = require('mariasql');
-var jwt = require('jsonwebtoken');
+//var jwt = require('jsonwebtoken');
 var config = require("../config");
 var checkToken = require('../utility/util').checkToken;
 
@@ -36,9 +36,8 @@ module.exports = (app) => {
         c.end();
     });
     app.post('/questionnaires', (req, res) => {
-        var decoded = jwt.verify(req.body.token, config.secret);
-        if (!decoded) {
-            res.status(400).send("Invalid token");
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
         }
         var questionnaire = req.body.questionnaire;
         questionnaire.createdBy = 'bob';
@@ -83,9 +82,12 @@ module.exports = (app) => {
 
     });
     app.post('/get_questionnaire', (req, res) => {
-        var decoded = jwt.verify(req.body.token, config.secret);
-        if (!decoded) {
-            res.status(400).send("Invalid token");
+        // var decoded = jwt.verify(req.body.token, config.secret);
+        // if (!decoded) {
+        //     res.status(400).send("Invalid token");
+        // }
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
         }
         var c = new Client(config.DB_CONFIG);      
         c.query('SELECT * FROM questionnaires WHERE id = ?', [req.body.id], function(err, rows) {
