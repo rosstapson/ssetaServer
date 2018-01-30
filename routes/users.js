@@ -17,6 +17,7 @@ module.exports = (app) => {
       c.end();
   });
 function createToken(user) {
+//    console.log(user);
     if (!user.role) {
         user.role = 'guest';
     }
@@ -49,8 +50,8 @@ function createToken(user) {
              res.status(400).send("Invalid User Credentials");
           }
           else {
-             var token = createToken(req.body.user);
-             var user = req.body.user;
+             var user = rows[0];
+             var token = createToken(user);             
              user.token = token;
              res.status(200).send(user);
           }
