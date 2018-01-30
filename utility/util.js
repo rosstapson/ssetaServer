@@ -1,4 +1,6 @@
 var jwt = require('jsonwebtoken');
+var config = require("../config");
+
 module.exports = {
     checkToken: function(req) {
         try {
