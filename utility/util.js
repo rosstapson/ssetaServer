@@ -1,5 +1,5 @@
+var jwt = require('jsonwebtoken');
 module.exports = {
-
     checkToken: function(req) {
         try {
             var decoded = jwt.verify(req.body.token, config.secret);
