@@ -7,7 +7,6 @@ var checkToken = require('../utility/util').checkToken;
 
 module.exports = (app) => {
   function createToken(user) {
-    //    console.log(user);
         if (!user.role) {
             user.role = 'guest';
         }
@@ -19,7 +18,6 @@ module.exports = (app) => {
         });
     }
     app.post('/user', (req, res) => {
-      console.log("shuckening the duckening")
       if (!checkToken(req)) {
         return res.status(401).send({error: "Invalid Token"});
       }
@@ -34,8 +32,38 @@ module.exports = (app) => {
       
       c.end();
   });
+  // ''/user_update
+
+  app.post('/user_update', (req, res) => {
+    if (!checkToken(req)) {
+      return res.status(401).send({error: "Invalid Token"});
+    }
+    var c = new Client(config.DB_CONFIG);
+    var user = req.body.user;
+    //connection.query('UPDATE users SET ? WHERE UserID = ?', [{ Name: name }, userId])
+    c.query('UPDATE users SET ? WHERE id = ?', 
+      [{ 
+        name: user.name,
+        email: user.email,
+        company: user.company,
+        division: user.division,
+        role: user.role,
+        access_level: user.access_level,
+        telephone: user.telephone,
+        address: user.address,
+        state: user.state,
+        country: user.country
+      }, user.id], function(err, rows) {
+      if (err) {
+        return res.status(400).send("DB Error, unable to update user")
+        console.log(err);
+      }
+      return res.status(200).send("zomg");
+    });
+    
+    c.end();
+});
   app.post('/user_list', (req, res) => {
-    console.log("chickening the quickening")
     if (!checkToken(req)) {
       return res.status(401).send({error: "Invalid Token"});
     }
