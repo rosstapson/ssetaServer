@@ -18,21 +18,24 @@ module.exports = (app) => {
         });
     }
   function getPendingQuestionnaires(user) {
+    console.log("get pending questionnaires");
     var c = new Client(config.DB_CONFIG);      
         c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
             if (err) {
                 console.log(err);
-                return res.status(400).send("zomg");
+                //return res.status(400).send("zomg");
+                throw err;
             }
             // `rows.info.metadata` contains the metadata
             let questionnaires =[];
-            rows.forEach(row => {
+            rows.forEach(row => {                
                 questionnaires.push({
                     id: row.id,
                     name: row.name,
                     reference: row.reference
                 })
             });
+            console.log("first");
             return questionnaires;
         });      
         c.end();
@@ -89,7 +92,9 @@ module.exports = (app) => {
              var user = rows[0];
              var token = createToken(user);             
              user.token = token;
-             questionnairesPending = getPendingQuestionnaires(user);
+             var questionnairesPending = getPendingQuestionnaires(user);
+             console.log("second");
+             console.log(questionnairesPending);
              user.pendingQuestionnaires = questionnairesPending;
              res.status(200).send(user);
           }
