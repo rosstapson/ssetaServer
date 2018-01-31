@@ -55,8 +55,8 @@ module.exports = (app) => {
         country: user.country
       }, user.id], function(err, rows) {
       if (err) {
-        return res.status(400).send("DB Error, unable to update user")
         console.log(err);
+        return res.status(400).send({error: "DB Error, unable to update user"});
       }
       return res.status(200).send("zomg");
     });
