@@ -18,7 +18,22 @@ module.exports = (app) => {
             expiresIn: 60 * 60 * 24
         });
     }
-  
+    app.post('/user', (req, res) => {
+      console.log("shuckening the duckening")
+      if (!checkToken(req)) {
+        return res.status(401).send({error: "Invalid Token"});
+      }
+      var c = new Client(config.DB_CONFIG);      
+      c.query('SELECT * FROM users WHERE id = ?', [req.body.id], { metadata: true }, function(err, rows) {
+        if (err) {
+          return res.status(400).send("DB Error, unable to retrieve user")
+          console.log(err);
+        }
+        return res.status(200).send(rows[0]);
+      });
+      
+      c.end();
+  });
   app.post('/user_list', (req, res) => {
     console.log("chickening the quickening")
     if (!checkToken(req)) {
