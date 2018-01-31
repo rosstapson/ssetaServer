@@ -41,19 +41,28 @@ module.exports = (app) => {
     var c = new Client(config.DB_CONFIG);
     var user = req.body.user;
     //connection.query('UPDATE users SET ? WHERE UserID = ?', [{ Name: name }, userId])
-    c.query('UPDATE users SET ? WHERE id = ?', 
-      [{ 
-        name: user.name,
-        email: user.email,
-        company: user.company,
-        division: user.division,
-        role: user.role,
-        access_level: user.access_level,
-        telephone: user.telephone,
-        address: user.address,
-        state: user.state,
-        country: user.country
-      }, user.id], function(err, rows) {
+    c.query(`UPDATE users SET
+        name = ?,
+        email = ?,
+        company = ?,
+        division = ?,
+        role = ?,
+        access_level = ?,
+        telephone = ?,
+        address = ?,
+        state = ?,
+        country = ? 
+        WHERE id = ?`,
+        [user.email,
+        user.company,
+        user.division,
+        user.role,
+        user.access_level,
+        user.telephone,
+        user.address,
+        user.state,
+        user.country,
+        user.id], function(err, rows) {
       if (err) {
         console.log(err);
         return res.status(400).send({error: "DB Error, unable to update user"});
