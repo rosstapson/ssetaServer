@@ -17,29 +17,7 @@ module.exports = (app) => {
             expiresIn: 60 * 60 * 24
         });
     }
-  function getPendingQuestionnaires(user) {
-    console.log("get pending questionnaires");
-    var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
-            if (err) {
-                console.log(err);
-                //return res.status(400).send("zomg");
-                throw err;
-            }
-            // `rows.info.metadata` contains the metadata
-            let questionnaires =[];
-            rows.forEach(row => {                
-                questionnaires.push({
-                    id: row.id,
-                    name: row.name,
-                    reference: row.reference
-                })
-            });
-            console.log("first");
-            return questionnaires;
-        });      
-        c.end();
-  }
+  
   app.get('/users', (req, res) => {      
       var c = new Client(config.DB_CONFIG);      
       c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
@@ -91,11 +69,7 @@ module.exports = (app) => {
           else {
              var user = rows[0];
              var token = createToken(user);             
-             user.token = token;
-             var questionnairesPending = getPendingQuestionnaires(user);
-             console.log("second");
-             console.log(questionnairesPending);
-             user.pendingQuestionnaires = questionnairesPending;
+             user.token = token;             
              res.status(200).send(user);
           }
         }
