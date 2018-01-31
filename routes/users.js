@@ -3,7 +3,6 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
-var checkToken = require('../utility/util').checkToken;
 
 module.exports = (app) => {
   function createToken(user) {
@@ -18,6 +17,26 @@ module.exports = (app) => {
             expiresIn: 60 * 60 * 24
         });
     }
+  function getPendingQuestionnaires(user) {
+    var c = new Client(config.DB_CONFIG);      
+        c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
+            if (err) {
+                console.log(err);
+                return res.status(400).send("zomg");
+            }
+            // `rows.info.metadata` contains the metadata
+            let questionnaires =[];
+            rows.forEach(row => {
+                questionnaires.push({
+                    id: row.id,
+                    name: row.name,
+                    reference: row.reference
+                })
+            });
+            return questionnaires;
+        });      
+        c.end();
+  }
   app.get('/users', (req, res) => {      
       var c = new Client(config.DB_CONFIG);      
       c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
@@ -38,8 +57,8 @@ module.exports = (app) => {
       if (err) {
         return res.status(400).send("DB Error, unable to retrieve users")
         console.log(err);
-      }      
-      return res.status(200).send(rows);
+      }
+      return rows;
     });
     
     c.end();
@@ -70,6 +89,8 @@ module.exports = (app) => {
              var user = rows[0];
              var token = createToken(user);             
              user.token = token;
+             questionnairesPending = getPendingQuestionnaires(user);
+             user.pendingQuestionnaires = questionnairesPending;
              res.status(200).send(user);
           }
         }
