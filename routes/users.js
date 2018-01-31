@@ -3,6 +3,7 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
+var checkToken = require('../utility/util').checkToken;
 
 module.exports = (app) => {
   function createToken(user) {
