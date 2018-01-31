@@ -3,6 +3,7 @@ var Client = require('mariasql');
 var cors = require('cors');
 var jwt = require('jsonwebtoken');
 var config = require("../config");
+var checkToken = require('../utility/util').checkToken;
 
 module.exports = (app) => {
   function createToken(user) {
@@ -37,8 +38,8 @@ module.exports = (app) => {
       if (err) {
         return res.status(400).send("DB Error, unable to retrieve users")
         console.log(err);
-      }
-      return rows;
+      }      
+      return res.status(200).send(rows);
     });
     
     c.end();
