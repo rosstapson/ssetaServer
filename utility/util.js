@@ -8,8 +8,7 @@ module.exports = {
             if (!decoded) {
                 return false;
             }
-            else {
-                console.log("valid");
+            else {                
                 return "valid";
             }
         }

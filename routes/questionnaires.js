@@ -8,10 +8,6 @@ module.exports = (app) => {
         console.log("get /questionnaire_list");
     });
     app.post('/questionnaire_list', (req, res) => {        
-        // var decoded = jwt.verify(req.body.token, config.secret);
-        // if (!decoded) {
-        //     res.status(400).send("Invalid token");
-        // }
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
@@ -81,11 +77,7 @@ module.exports = (app) => {
         });
 
     });
-    app.post('/get_questionnaire', (req, res) => {
-        // var decoded = jwt.verify(req.body.token, config.secret);
-        // if (!decoded) {
-        //     res.status(400).send("Invalid token");
-        // }
+    app.post('/get_questionnaire', (req, res) => {        
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }

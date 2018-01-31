@@ -5,6 +5,18 @@ var jwt = require('jsonwebtoken');
 var config = require("../config");
 
 module.exports = (app) => {
+  function createToken(user) {
+    //    console.log(user);
+        if (!user.role) {
+            user.role = 'guest';
+        }
+        return jwt.sign({
+            username: user.email,
+            role: user.role
+        }, config.secret, {
+            expiresIn: 60 * 60 * 24
+        });
+    }
   app.get('/users', (req, res) => {      
       var c = new Client(config.DB_CONFIG);      
       c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
@@ -16,18 +28,22 @@ module.exports = (app) => {
       
       c.end();
   });
-function createToken(user) {
-//    console.log(user);
-    if (!user.role) {
-        user.role = 'guest';
+  app.post('/user_list', (req, res) => {
+    if (!checkToken(req)) {
+      return res.status(401).send({error: "Invalid Token"});
     }
-    return jwt.sign({
-        username: user.email,
-        role: user.role
-    }, config.secret, {
-        expiresIn: 60 * 60 * 24
+    var c = new Client(config.DB_CONFIG);      
+    c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
+      if (err) {
+        return res.status(400).send("DB Error, unable to retrieve users")
+        console.log(err);
+      }
+      return rows;
     });
-}
+    
+    c.end();
+});
+
   app.options('/login', cors());
   app.post('/login', (req, res) => {
     var c = new Client(config.DB_CONFIG);
