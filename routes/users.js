@@ -19,18 +19,8 @@ module.exports = (app) => {
         });
     }
   
-  app.get('/users', (req, res) => {      
-      var c = new Client(config.DB_CONFIG);      
-      c.query('SELECT * FROM users', null, { metadata: true }, function(err, rows) {
-        if (err)
-          console.log(err);
-        // `rows.info.metadata` contains the metadata
-        console.dir(rows);
-      });
-      
-      c.end();
-  });
   app.post('/user_list', (req, res) => {
+    console.log("chickening the quickening")
     if (!checkToken(req)) {
       return res.status(401).send({error: "Invalid Token"});
     }
