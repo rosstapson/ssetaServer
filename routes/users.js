@@ -53,7 +53,9 @@ module.exports = (app) => {
         state = ?,
         country = ? 
         WHERE id = ?`,
-        [user.email,
+        [
+        user.name,
+        user.email,
         user.company,
         user.division,
         user.role,
@@ -67,7 +69,7 @@ module.exports = (app) => {
         console.log(err);
         return res.status(400).send({error: "DB Error, unable to update user"});
       }
-      return res.status(200).send("zomg");
+      return res.status(200).send({message: "zomg"});
     });
     
     c.end();
