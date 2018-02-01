@@ -15,7 +15,7 @@ module.exports = (app) => {
         c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
             if (err) {
                 console.log(err);
-                return res.status(400).send("zomg");
+                return res.status(400).send({error: "token expired"});
             }
             // `rows.info.metadata` contains the metadata
             let questionnaires =[];
