@@ -9,5 +9,6 @@ app.use(bodyParser.json())
 
 require('./routes/users')(app);
 require('./routes/questionnaires')(app);
+require('./routes/schedule')(app);
 
 app.listen(8080, () => console.log('ZOMG. listening on port 8080.'))
