@@ -1,5 +1,4 @@
 var Client = require('mariasql');
-//var jwt = require('jsonwebtoken');
 var config = require("../config");
 var checkToken = require('../utility/util').checkToken;
 
