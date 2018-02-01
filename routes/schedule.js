@@ -11,7 +11,7 @@ module.exports = (app) => {
             return res.status(401).send({error: "Invalid Token"});
         }
         var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT * FROM questionnaires where user_id = (?)', [req.body.id], function(err, rows) {
+        c.query('SELECT * FROM schedule where user_id = (?)', [req.body.id], function(err, rows) {
             if (err) {
                 console.log(err);
                 return res.status(400).send({error: "token expired"});
