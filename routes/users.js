@@ -89,7 +89,16 @@ module.exports = (app) => {
     
     c.end();
 });
-
+app.get('/check_token', (req, res) => {
+  try {
+    checkToken(req);
+    return res.status(200).send({message: 'valid'});
+  }
+  catch(err) {
+    return res.status(302).send({message: 'not valid'});
+  }
+  
+})
   app.options('/login', cors());
   app.post('/login', (req, res) => {
     var c = new Client(config.DB_CONFIG);
