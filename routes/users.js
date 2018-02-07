@@ -89,7 +89,7 @@ module.exports = (app) => {
     
     c.end();
 });
-app.get('/check_token', (req, res) => {
+app.post('/check_token', (req, res) => {
   try {
     checkToken(req);
     return res.status(200).send({message: 'valid'});
