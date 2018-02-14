@@ -6,7 +6,7 @@ var c = new Client(config.DB_CONFIG);
 var meta = {};
 
 function Meta() {
-    this.emit.bind(this);
+    var self = this;
     function _checkForErrors(error, rows, reason) {
         if (error) {
             this.emit('error', error);
@@ -43,7 +43,7 @@ function Meta() {
         } else {
             console.log("success");
             meta.questionnaires = rows;
-            this.emit('success', meta);
+            self.emit('success', meta);
         }
     }
     function perform() {
