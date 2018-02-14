@@ -11,7 +11,7 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var c = new Client(config.DB_CONFIG);      
+        var c = new Client(config.DB_CONFIG);
         c.query('SELECT * FROM schedule where user_id = (?)', [req.body.id], function(err, rows) {
             if (err) {
                 console.log(err);
@@ -40,5 +40,29 @@ module.exports = (app) => {
             res.status(200).send(meta);
         });
         meta.perform();
-    })
+    });
+    app.post('/schedule_events', (req, res) => {
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
+        }
+        var events = req.body.schedule.events;
+        var values = [];
+        events.forEach(event => {
+            values.push([event.userId, event.eventId, event.eventType, event.dateTime, 'pending']);
+        });
+        var c = new Client(config.DB_CONFIG);
+        
+        c.query('INSERT INTO schedule (user_id, event_id, event_type, datetime, status) VALUES (?, ?, ?, ?, ?)',
+        [ values ],  function(err, rows) {
+                if (err) {
+                console.log(err);
+                return res.status(400).send(err);
+                }
+                else {
+                    return res.status(201);
+                }
+            }
+        );
+        
+    });
 }
