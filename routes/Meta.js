@@ -6,6 +6,7 @@ var c = new Client(config.DB_CONFIG);
 var meta = {};
 
 function Meta() {
+    this.emit.bind(this);
     function _checkForErrors(error, rows, reason) {
         if (error) {
             this.emit('error', error);
