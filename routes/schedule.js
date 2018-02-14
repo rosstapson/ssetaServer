@@ -50,14 +50,14 @@ module.exports = (app) => {
         //console.log(req.body.schedule)
         events.forEach(event => {
             //console.log(event)
-            values.push([event.userId, event.eventId, event.eventType, event.dateTime, 'pending']);
+            values.push([[event.userId, event.eventId, event.eventType, event.dateTime, "pending"]]);
         });
-        console.log(values)
+        //console.log(values)
         var c = new Client(config.DB_CONFIG);
-        var sql = 'INSERT INTO schedule (user_id, event_id, event_type, datetime, status) VALUES ?'
-        c.query(
+        var sql = "INSERT INTO schedule (user_id, event_id, event_type, date_time, status) VALUES :params";
+        var query = c.query(
             sql,
-            [ values ],  
+            { params: values},  
             function(err, rows) {
                 if (err) {
                 console.log(err);
@@ -68,6 +68,5 @@ module.exports = (app) => {
                 }
             }
         );
-        
     });
 }
