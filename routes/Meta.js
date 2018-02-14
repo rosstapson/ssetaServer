@@ -19,7 +19,6 @@ function Meta() {
         return false;
     }
     function _getConferences(error, rows) {
-        console.log("get conferences"); 
         if (_checkForErrors(error, rows, 'users')) {
             return false;
         } else {
@@ -28,7 +27,6 @@ function Meta() {
         }
     }
     function _getQuestionnaires(error, rows) {
-        console.log("get questionnaires");
         if(_checkForErrors(error, rows, 'conferences')) {
             return false;
         } else {
@@ -37,17 +35,14 @@ function Meta() {
         }
     }
     function _populate(error, rows) {
-        console.log("populate");
         if (_checkForErrors(error, rows, 'questionnaires')) {
             return false;
         } else {
-            console.log("success");
             meta.questionnaires = rows;
             self.emit('success', meta);
         }
     }
     function perform() {
-        console.log("perform")
         c.query('SELECT * FROM users;', null, _getConferences);
     }
     this.perform = perform;    

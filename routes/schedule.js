@@ -37,7 +37,6 @@ module.exports = (app) => {
             res.end(reason);
         });
         meta.on('success', meta => {
-            console.log("zomg.")
             res.status(200).send(meta);
         });
         meta.perform();
