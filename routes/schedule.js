@@ -54,9 +54,11 @@ module.exports = (app) => {
         });
         console.log(values)
         var c = new Client(config.DB_CONFIG);
-        
-        c.query('INSERT INTO schedule (user_id, event_id, event_type, datetime, status) VALUES (?, ?, ?, ?, ?)',
-        [ values ],  function(err, rows) {
+        var sql = 'INSERT INTO schedule (user_id, event_id, event_type, datetime, status) VALUES ?'
+        c.query(
+            sql,
+            [ values ],  
+            function(err, rows) {
                 if (err) {
                 console.log(err);
                 return res.status(400).send(err);
