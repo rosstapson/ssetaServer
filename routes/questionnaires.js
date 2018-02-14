@@ -1,6 +1,6 @@
 var Client = require('mariasql');
 var config = require("../config");
-var checkToken = require('../utility/util').checkToken;
+var checkToken = require('../util').checkToken;
 
 module.exports = (app) => {
     app.get('/questionnaire_list', (req, res) => {
