@@ -47,11 +47,12 @@ module.exports = (app) => {
         }
         var events = req.body.schedule.events;
         var values = [];
-        console.log(req.body.schedule)
+        //console.log(req.body.schedule)
         events.forEach(event => {
-            console.log(event)
+            //console.log(event)
             values.push([event.userId, event.eventId, event.eventType, event.dateTime, 'pending']);
         });
+        console.log(values)
         var c = new Client(config.DB_CONFIG);
         
         c.query('INSERT INTO schedule (user_id, event_id, event_type, datetime, status) VALUES (?, ?, ?, ?, ?)',
