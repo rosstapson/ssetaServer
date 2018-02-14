@@ -1,6 +1,7 @@
 var Client = require('mariasql');
 var config = require("../config");
 var checkToken = require('../util').checkToken;
+var Meta = require('./Meta');
 
 module.exports = (app) => {
     app.get('/schedule', (req, res) => {
@@ -25,38 +26,20 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var c = new Client(config.DB_CONFIG);
-        var meta = {
-            users: [],
-            questionnaires: [],
-            conferences: []
-        };
-        // three queries, one for each
-        c.query('SELECT * FROM users', null, function(err, rows) {
-            if (err) {
-                console.log(err);
-                return res.status(400).send({error: err});
-            }
-            meta.users = rows;
-            console.log("users");
+        var meta = new Meta();
+        meta.on('error', error =>{
+            console.log(error);
+            res.writeHead(500);
+            res.end();
         });
-        c.query('SELECT * FROM conferences', null, function(err, rows) {
-            if (err) {
-                console.log(err);
-                return res.status(400).send({error: err});
-            }
-            meta.conferences = rows;
-            console.log("rows");
+        meta.on('failure', reason => {
+            console.log(reason);
+            res.end(reason);
         });
-        c.query('SELECT * FROM questionnaires', null, function(err, rows) {
-            if (err) {
-                console.log(err);
-                return res.status(400).send({error: err});
-            }
-            meta.questionnaires = rows;
-            console.log("quests");
+        meta.on('success', meta => {
+            console.log("zomg.")
+            res.status(200).send(meta);
         });
-	console.log(meta);
-        res.status(200).send(meta);
-    });
+        meta.perform();
+    })
 }
