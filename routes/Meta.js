@@ -49,8 +49,7 @@ function Meta() {
         console.log("perform")
         c.query('SELECT * FROM users;', null, _getConferences);
     }
-    this.perform = perform;
-    this.emit = EventEmitter.emit;
+    this.perform = perform;    
 }
 util.inherits(Meta, EventEmitter);
 module.exports = Meta;
