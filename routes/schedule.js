@@ -46,18 +46,21 @@ module.exports = (app) => {
             return res.status(401).send({error: "Invalid Token"});
         }
         var events = req.body.schedule.events;
-        var values = [];
+        var values = [events.length];
         //console.log(req.body.schedule)
-        events.forEach(event => {
-            //console.log(event)
-            values.push([[event.userId, event.eventId, event.eventType, event.dateTime, "pending"]]);
-        });
-        //console.log(values)
+        for (var i = 0; i < events.length; i++) {
+            values[i] = [events[i].userId, events[i].eventId, events[i].eventType, events[i].dateTime, "pending"];
+        }
+        // events.forEach(event => {
+        //     //console.log(event)
+        //     values.push();
+        // });
+        console.log(values)
         var c = new Client(config.DB_CONFIG);
-        var sql = "INSERT INTO schedule (user_id, event_id, event_type, date_time, status) VALUES :params";
+        var sql = "INSERT INTO schedule (user_id, event_id, event_type, date_time, status) VALUES ?";
         var query = c.query(
             sql,
-            { params: values},  
+            [values],  
             function(err, rows) {
                 if (err) {
                 console.log(err);
