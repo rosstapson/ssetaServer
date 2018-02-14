@@ -1,12 +1,12 @@
 const EventEmitter = require('events');
 var config = require('../config');
-
+var util = require('util');
 var Client = require('mariasql');
 var c = new Client(config.DB_CONFIG);
 var meta = {};
 
-export default class Meta extends EventEmitter {
-    _checkForErrors(error, rows, reason) {
+function Meta() {
+    function _checkForErrors(error, rows, reason) {
         if (error) {
             this.emit('error', error);
             return true;
@@ -17,7 +17,8 @@ export default class Meta extends EventEmitter {
         }        
         return false;
     }
-    _getConferences(error, rows) {        
+    function _getConferences(error, rows) {
+        console.log("get conferences"); 
         if (_checkForErrors(error, rows, 'users')) {
             return false;
         } else {
@@ -25,7 +26,8 @@ export default class Meta extends EventEmitter {
             c.query('SELECT * FROM conferences', null, _getQuestionnaires);
         }
     }
-    _getQuestionnaires(error, rows) {
+    function _getQuestionnaires(error, rows) {
+        console.log("get questionnaires");
         if(_checkForErrors(error, rows, 'conferences')) {
             return false;
         } else {
@@ -33,15 +35,22 @@ export default class Meta extends EventEmitter {
             c.query('SELECT * FROM questionnaires', null, _populate);
         }
     }
-    _populate(error, rows) {
-        if (this._checkForErrors(error, rows, 'questionnaires')) {
+    function _populate(error, rows) {
+        console.log("populate");
+        if (_checkForErrors(error, rows, 'questionnaires')) {
             return false;
         } else {
+            console.log("success");
             meta.questionnaires = rows;
             this.emit('success', meta);
         }
     }
-    perform() {
-        c.query('SELECT * FROM users', null, _getConferences);
+    function perform() {
+        console.log("perform")
+        c.query('SELECT * FROM users;', null, _getConferences);
     }
+    this.perform = perform;
+    this.emit = EventEmitter.emit;
 }
+util.inherits(Meta, EventEmitter);
+module.exports = Meta;
