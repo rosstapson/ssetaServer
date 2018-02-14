@@ -47,7 +47,9 @@ module.exports = (app) => {
         }
         var events = req.body.schedule.events;
         var values = [];
+        console.log(req.body.schedule)
         events.forEach(event => {
+            console.log(event)
             values.push([event.userId, event.eventId, event.eventType, event.dateTime, 'pending']);
         });
         var c = new Client(config.DB_CONFIG);
