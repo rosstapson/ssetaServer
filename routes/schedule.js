@@ -38,6 +38,7 @@ module.exports = (app) => {
                 return res.status(400).send({error: err});
             }
             meta.users = rows;
+            console.log("users");
         });
         c.query('SELECT * FROM conferences', null, function(err, rows) {
             if (err) {
@@ -45,6 +46,7 @@ module.exports = (app) => {
                 return res.status(400).send({error: err});
             }
             meta.conferences = rows;
+            console.log("rows");
         });
         c.query('SELECT * FROM questionnaires', null, function(err, rows) {
             if (err) {
@@ -52,7 +54,9 @@ module.exports = (app) => {
                 return res.status(400).send({error: err});
             }
             meta.questionnaires = rows;
+            console.log("quests");
         });
+	console.log(meta);
         res.status(200).send(meta);
     });
 }
