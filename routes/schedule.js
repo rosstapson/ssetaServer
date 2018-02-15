@@ -49,10 +49,10 @@ module.exports = (app) => {
         var values = '';
        
         for (var i = 0; i < events.length; i++) {
-            values = values + "("
-                events[i].userId + "," +
-                events[i].eventId + "," +
-                events[i].eventType + "," +
+            values = values + "(" +
+                events[i].userId + ", " +
+                events[i].eventId + ", '" +
+                events[i].eventType + "', " +
                 events[i].dateTime + "," +
                 "'pending')";
             if (i < events.length - 1) {
