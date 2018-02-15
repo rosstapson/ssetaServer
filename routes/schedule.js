@@ -2,6 +2,7 @@ var Client = require('mariasql');
 var config = require("../config");
 var checkToken = require('../util').checkToken;
 var Meta = require('./Meta');
+var EventSaver = require('./EventSaver');
 
 module.exports = (app) => {
     app.get('/schedule', (req, res) => {
@@ -76,5 +77,22 @@ module.exports = (app) => {
                 }
             }
         );
+    });
+    app.post('/schedule_event', (req, res) => {
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
+        }
+        var event = req.body.schedule.event;
+        console.log(event);
+        var eventSaver = new EventSaver();
+        eventSaver.on('error', error =>{
+            console.log(error);
+            res.writeHead(500);
+            res.end();
+        });
+        eventSaver.on('success', meta => {
+            res.status(200).send(meta);
+        });
+        eventSaver.perform(event);        
     });
 }
