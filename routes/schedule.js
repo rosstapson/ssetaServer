@@ -82,7 +82,7 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var event = req.body.schedule.event;
+        var event = req.body.event;
         console.log(event);
         var eventSaver = new EventSaver();
         eventSaver.on('error', error =>{
