@@ -3,6 +3,7 @@ var config = require("../config");
 var checkToken = require('../util').checkToken;
 var Meta = require('./Meta');
 var EventSaver = require('./EventSaver');
+var ScheduleSaver = require('./ScheduleSaver');
 
 module.exports = (app) => {
     app.get('/schedule', (req, res) => {
@@ -46,37 +47,16 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var events = req.body.schedule.events;
-        var values = '';
-       
-        for (var i = 0; i < events.length; i++) {
-            values = values + "(" +
-                events[i].userId + ", " +
-                events[i].eventId + ", '" +
-                events[i].eventType + "', " +
-                events[i].dateTime + "," +
-                "'pending')";
-            if (i < events.length - 1) {
-                values = values + ","
-            }
-        }
-        
-        console.log(values)
-        var c = new Client(config.DB_CONFIG);
-        var sql = "INSERT INTO schedule (user_id, event_id, event_type, date_time, status) VALUES ?";
-        var query = c.query(
-            sql,
-            [values],  
-            function(err, rows) {
-                if (err) {
-                console.log(err);
-                return res.status(400).send(err);
-                }
-                else {
-                    return res.status(201);
-                }
-            }
-        );
+        var scheduleSaver = new ScheduleSaver();
+        scheduleSaver.on('error', error =>{
+            console.log(error);
+            res.writeHead(500);
+            res.end();
+        });
+        scheduleSaver.on('complete', result => {
+            res.status(201).send(result);
+        });
+        scheduleSaver.perform(req.body.schedule);  
     });
     app.post('/schedule_event', (req, res) => {
         if (!checkToken(req)) {
@@ -91,7 +71,7 @@ module.exports = (app) => {
             res.end();
         });
         eventSaver.on('success', meta => {
-            res.status(200).send(meta);
+            res.status(201).send(meta);
         });
         eventSaver.perform(event);        
     });
