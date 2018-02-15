@@ -9,10 +9,10 @@ function EventSaver() {
     var self = this;
     function _checkForErrors(error, rows) {
         if (error) {
-            this.emit('error', error);
+            self.emit('error', error);
             return true;
         }
-        this.emit('success', rows);
+        self.emit('success', rows);
     }
     function perform(event) {
         var values = [event.userId, event.eventId, event.eventType, event.dateTime, 'pending']
