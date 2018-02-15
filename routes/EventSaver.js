@@ -21,4 +21,4 @@ function EventSaver() {
     this.perform = perform;    
 }
 util.inherits(EventSaver, EventEmitter);
-module.exports = Meta;
+module.exports = EventSaver;
