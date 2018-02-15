@@ -3,7 +3,7 @@ var config = require("../config");
 var checkToken = require('../util').checkToken;
 var Meta = require('./Meta');
 var EventSaver = require('./EventSaver');
-var ScheduleSaver = require('./ScheduleSaver');
+
 
 module.exports = (app) => {
     app.get('/schedule', (req, res) => {
@@ -47,16 +47,25 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var scheduleSaver = new ScheduleSaver(req.body.schedule);
-        scheduleSaver.on('error', error =>{
+	var events = req.body.schedule.events;
+	var index = 0;
+	var length = events.length;
+        var eventSaver = new EventSaver();
+        eventSaver.on('error', error =>{
             console.log(error);
             res.writeHead(500);
             res.end();
         });
-        scheduleSaver.on('complete', result => {
-            res.status(201).send(result);
+        eventSaver.on('success', result => {
+		index = index + 1;
+		if (index < length) {
+			eventSaver.perform(events[index]);
+		}
+		else {
+            		return res.status(201).send(result);
+		}
         });
-        scheduleSaver.perform();  
+        eventSaver.perform(events[0]);  
     });
     app.post('/schedule_event', (req, res) => {
         if (!checkToken(req)) {
