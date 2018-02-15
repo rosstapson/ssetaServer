@@ -47,7 +47,7 @@ module.exports = (app) => {
         if (!checkToken(req)) {
             return res.status(401).send({error: "Invalid Token"});
         }
-        var scheduleSaver = new ScheduleSaver();
+        var scheduleSaver = new ScheduleSaver(req.body.schedule);
         scheduleSaver.on('error', error =>{
             console.log(error);
             res.writeHead(500);
@@ -56,7 +56,7 @@ module.exports = (app) => {
         scheduleSaver.on('complete', result => {
             res.status(201).send(result);
         });
-        scheduleSaver.perform(req.body.schedule);  
+        scheduleSaver.perform();  
     });
     app.post('/schedule_event', (req, res) => {
         if (!checkToken(req)) {
