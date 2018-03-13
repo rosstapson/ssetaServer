@@ -1,6 +1,7 @@
 var Client = require('mariasql');
 var config = require("../config");
 var checkToken = require('../util').checkToken;
+var AnswerSaver = require('./AnswerSaver');
 
 module.exports = (app) => {
     app.get('/questionnaire_list', (req, res) => {
@@ -111,5 +112,30 @@ module.exports = (app) => {
         });
       
         c.end();
+    });
+app.post('/answers', (req, res) => {
+    if (!checkToken(req)) {
+        return res.status(401).send({error: "Invalid Token"});
+    }
+    var results = req.body.result;
+    var answers = results.answers;
+	var index = 0;
+	var length = answers.length;
+        var answerSaver = new AnswerSaver();
+        answerSaver.on('error', error =>{
+            console.log(error);
+            res.writeHead(500);
+            res.end();
+        });
+        answerSaver.on('success', result => {
+            index = index + 1;
+            if (index < length) {
+                answerSaver.perform(answers[index], results.userId, results.questionnaireId);
+            }
+            else {
+                return res.status(201).send(result);
+            }
+        });
+        eventSaver.perform(answers[0], result.userId, result.questionnaireId);  
     });
 }

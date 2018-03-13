@@ -57,13 +57,13 @@ module.exports = (app) => {
             res.end();
         });
         eventSaver.on('success', result => {
-		index = index + 1;
-		if (index < length) {
-			eventSaver.perform(events[index]);
-		}
-		else {
-            		return res.status(201).send(result);
-		}
+            index = index + 1;
+            if (index < length) {
+                eventSaver.perform(events[index]);
+            }
+            else {
+                return res.status(201).send(result);
+            }
         });
         eventSaver.perform(events[0]);  
     });
