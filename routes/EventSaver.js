@@ -15,8 +15,8 @@ function EventSaver() {
         self.emit('success', rows);
     }
     function perform(event) {
-        var values = [event.userId, event.eventId, event.eventType, event.dateTime, 'pending']
-        c.query("INSERT INTO schedule (user_id, event_id, event_type, date_time, status) VALUES (?, ?, ?, ?, ?)", values, _checkForErrors);
+        var values = [event.userId, event.eventId, event.eventType, event.dateTime, 'pending', event.reference]
+        c.query("INSERT INTO schedule (user_id, event_id, event_type, date_time, status, event_ref) VALUES (?, ?, ?, ?, ?, ?)", values, _checkForErrors);
     }
     this.perform = perform;    
 }
