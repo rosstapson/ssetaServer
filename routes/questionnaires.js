@@ -136,6 +136,6 @@ app.post('/answers', (req, res) => {
                 return res.status(201).send(result);
             }
         });
-        eventSaver.perform(answers[0], result.userId, result.questionnaireId);  
+        answerSaver.perform(answers[0], result.userId, result.questionnaireId);  
     });
 }
