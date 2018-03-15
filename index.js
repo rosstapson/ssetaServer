@@ -26,6 +26,7 @@ app.use(bodyParser.json())
 require('./routes/users')(app);
 require('./routes/questionnaires')(app);
 require('./routes/schedule')(app);
+require('./routes/program')(app);
 
 http.createServer(httpApp).listen(config.httpPort, function() {
     console.log("ZOMG!");
