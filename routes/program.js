@@ -24,4 +24,21 @@ module.exports = (app) => {
         });
         c.end();
     });
+    app.post('/program_add', (req, res) => {
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
+        }
+        var c = new Client(config.DB_CONFIG);
+        var entry = req.body.entry;
+        var values = [entry.type, entry.category, entry.relevance, entry.month, entry.id];
+        c.query('INSERT INTO program VALUES (?, ?, ?, ?, ?)', values, function(err, rows) {
+            if (err) {
+                console.log(err);
+                return res.status(400).send({error: err});
+            }
+            // `rows.info.metadata` contains the metadata            
+            res.status(200).send(rows);
+        });
+        c.end();
+    });
 }
