@@ -37,7 +37,7 @@ module.exports = (app) => {
             return res.status(401).send({error: "Invalid Token"});
         }
         var questionnaire = req.body.questionnaire;
-        questionnaire.createdBy = 'bob';
+        //questionnaire.createdBy = 'bob';
         var c = new Client(config.DB_CONFIG);
         c.query('INSERT INTO questionnaires (name, reference, training_provider, client_company, client_division, category) VALUES (?, ?, ?, ?, ?)',
       [ 
