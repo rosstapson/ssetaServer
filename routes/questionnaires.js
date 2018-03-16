@@ -138,4 +138,40 @@ app.post('/answers', (req, res) => {
         });
         answerSaver.perform(answers[0], results.userId, results.questionnaireId);  
     });
+    app.post('/questionnaires_by_category', (req, res) => {        
+        if (!checkToken(req)) {
+            return res.status(401).send({error: "Invalid Token"});
+        }
+        var c = new Client(config.DB_CONFIG);      
+        c.query('SELECT * FROM questionnaires WHERE category = ?', [req.body.category], function(err, rows) {
+            if (err) {
+                console.log(err);
+                return res.status(400).send("Unable to retrieve questionnaires");
+            }
+            // rows.info.metadata` contains the metadat
+            
+            let questionnaire = {
+                id: rows[0].id,
+                name: rows[0].name,
+                reference: rows[0].reference,
+                trainingProvider: rows[0].training_provider,
+                clientCompany: rows[0].client_company,
+                clientDivision: rows[0].client_division,
+                formEntries: []
+            };
+            
+            c.query('SELECT * FROM questions WHERE questionnaire_id = ?', [req.body.id], function(err, rows) {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).send("Unable to retrieve questions");
+                }
+                rows.forEach(row => {                                       
+                    questionnaire.formEntries.push(row);
+                });                
+                return res.status(200).send(questionnaire);
+            });            
+        });
+      
+        c.end();
+    });
 }
