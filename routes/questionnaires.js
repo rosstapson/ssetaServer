@@ -12,7 +12,7 @@ module.exports = (app) => {
             return res.status(401).send({error: "Invalid Token"});
         }
         var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT id, name, reference FROM questionnaires', null, function(err, rows) {
+        c.query('SELECT id, name, reference, category FROM questionnaires', null, function(err, rows) {
             if (err) {
                 console.log(err);
                 return res.status(400).send({error: "token expired"});
@@ -23,7 +23,8 @@ module.exports = (app) => {
                 questionnaires.push({
                     id: row.id,
                     name: row.name,
-                    reference: row.reference
+                    reference: row.reference,
+                    category: row.category
                 })
             });
             res.status(200).send(questionnaires);
@@ -38,13 +39,14 @@ module.exports = (app) => {
         var questionnaire = req.body.questionnaire;
         questionnaire.createdBy = 'bob';
         var c = new Client(config.DB_CONFIG);
-        c.query('INSERT INTO questionnaires (name, reference, training_provider, client_company, client_division) VALUES (?, ?, ?, ?, ?)',
+        c.query('INSERT INTO questionnaires (name, reference, training_provider, client_company, client_division, category) VALUES (?, ?, ?, ?, ?)',
       [ 
         questionnaire.name,
         questionnaire.reference,
         questionnaire.trainingProvider,
         questionnaire.clientCompany,
-        questionnaire.clientDivision          
+        questionnaire.clientDivision,
+        questionnaire.category
         ],  function(err, rows) {
         if (err) {
           console.log(err);
@@ -96,6 +98,7 @@ module.exports = (app) => {
                 trainingProvider: rows[0].training_provider,
                 clientCompany: rows[0].client_company,
                 clientDivision: rows[0].client_division,
+                category: rows[0].category,
                 formEntries: []
             };
             
@@ -137,41 +140,5 @@ app.post('/answers', (req, res) => {
             }
         });
         answerSaver.perform(answers[0], results.userId, results.questionnaireId);  
-    });
-    app.post('/questionnaires_by_category', (req, res) => {        
-        if (!checkToken(req)) {
-            return res.status(401).send({error: "Invalid Token"});
-        }
-        var c = new Client(config.DB_CONFIG);      
-        c.query('SELECT * FROM questionnaires WHERE category = ?', [req.body.category], function(err, rows) {
-            if (err) {
-                console.log(err);
-                return res.status(400).send("Unable to retrieve questionnaires");
-            }
-            // rows.info.metadata` contains the metadat
-            
-            let questionnaire = {
-                id: rows[0].id,
-                name: rows[0].name,
-                reference: rows[0].reference,
-                trainingProvider: rows[0].training_provider,
-                clientCompany: rows[0].client_company,
-                clientDivision: rows[0].client_division,
-                formEntries: []
-            };
-            
-            c.query('SELECT * FROM questions WHERE questionnaire_id = ?', [req.body.id], function(err, rows) {
-                if (err) {
-                    console.log(err);
-                    return res.status(400).send("Unable to retrieve questions");
-                }
-                rows.forEach(row => {                                       
-                    questionnaire.formEntries.push(row);
-                });                
-                return res.status(200).send(questionnaire);
-            });            
-        });
-      
-        c.end();
-    });
+    });    
 }
